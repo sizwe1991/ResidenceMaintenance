@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:outputStylesheet library="css" name="default.css"  />
+    <link rel="shortcut icon"  href="resources/images/favicon.ico"/>
+    <link rel="shortcut icon"  href="../resources/images/favicon.ico"/>
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Residence Maintenance</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+            <p:dialog modal="true" widgetVar="statusDialog" header="Please wait while processing..."
+                      draggable="false" closable="false" resizable="false" >
+                <p:graphicImage value="/resources/images/ajaxloader/loadingbar.gif" />
+            </p:dialog>
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="17%" resizable="false" closable="false" collapsible="false">
+                    <img src=  "${request.contextPath}/resources/images/logo.png"  alt="banner" width="500"/>
+
+                    <c:if test="#{login.objUser.username != null}" >
+
+                        <h:form styleClass="login">
+                            <p:commandButton id="dynaButton" value="#{login.objUser.username}-(#{login.objUser.name})" icon="ui-icon-person" type="button"/>
+                            <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+                                <p:submenu label="Settings">
+                                    <p:menuitem value="Logout" ajax="false" actionListener="#{login.logout()}" style="color: red" />
+
+                                </p:submenu>
+
+                            </p:menu>
+
+                        </h:form>
+
+                    </c:if>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="40" closable="true" collapsible="true">
+                    <b>  <i>All Right Reserved @ Vaal University of Technology: Information Technology Services @ copyright 2016</i></b>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="200"  collapsible="true">
+
+
+                    <h:form>
+                        <p:menu>
+                            <p:menuitem  actionListener="#{redirect.dashBoardPage()}" value="Dashboard" />
+                        </p:menu>
+
+                        <p:menu >
+                            <p:menuitem value="System Report" actionListener="#{redirect.systemReportPage()}" />
+                        </p:menu>
+
+
+
+                        <p:menu>
+                            <p:submenu label="Administrator">
+                                <p:menuitem  actionListener="#{redirect.viewIncident()}"   icon="ui-icon-folder-open" value="View Incidents" />
+                                <p:menuitem  actionListener="#{redirect.manageStaff()}"  icon="ui-icon-person" value="Manage Staff" />
+                                <p:menuitem  actionListener="#{redirect.manageResidence()}"  icon="ui-icon-wrench" value="Manage Residence" />
+                                <p:menuitem  actionListener="#{redirect.manageCategory()}"  icon="ui-icon-gear" value="Manage Categories" />
+                            </p:submenu>
+                        </p:menu> 
+
+
+
+
+                    </h:form>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <ui:insert name="content">
+                        <center>
+                            <h:form id="mainForm">
+
+
+
+                            </h:form>
+
+                        </center>
+
+
+                    </ui:insert>
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+

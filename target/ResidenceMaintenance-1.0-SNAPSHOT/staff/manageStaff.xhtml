@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="content">
+        <h:form id="form">
+
+            <p:growl id="msgs"  showDetail="true" sticky="false" life="6000" /> 
+            <p:panel >
+
+
+                <h:panelGrid id="grid" columns="5" cellpadding="5">
+                    <h:outputLabel for="name" value="Search User:" style="font-weight:bold"/>                    
+                    <p:inputText id="name" value="#{userController.stuffInput}" placeholder="Search Staff"   required="false" label="Name"/>
+                    <p:message for="name" />
+
+                    <p:commandButton actionListener="#{userController.btnSearchUser}" icon="ui-icon-search" value="Search"  ajax="false" validateClient="true"/>
+                    <p:commandButton actionListener="#{userController.refreshStaff}"  icon="ui-icon-refresh" value="Clear" ajax="false" validateClient="true" style="margin-right:10px"/>
+
+                </h:panelGrid>
+
+            </p:panel>
+
+            <p:panel>
+                <p:dataTable 
+                    var="staff" value="#{userController.staffList}" 
+                    resizableColumns="true" rows="20"   paginator="true"   stickyHeader="false"
+                    editable="true" style="margin-bottom:20px"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="20,30,40">
+
+                    <p:ajax event="rowEdit" listener="#{userController.onRowEdit}" update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{userController.onRowCancel}" update=":form:msgs" />
+
+                    <p:column sortBy="staffNo" headerText="Staff No" width="70">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.staffNo}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.staffNo}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column sortBy="name" headerText="Full Names">
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.name}" /> 
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.name}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column sortBy="surname" headerText="Surname">
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.surname}" /> 
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.surname}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column sortBy="email" headerText="Email Address">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.email}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.email}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column width="80"  headerText="Ext">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.ext}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.ext}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column  width="100" headerText="Room">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.room}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{staff.room}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+
+
+                    <p:column sortBy="type" headerText="Type" width="80">
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{staff.type}" />  
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="type" value="#{staff.type}" style="width:80px">
+                                    <f:selectItem itemLabel="Select One" noSelectionOption=""/>
+                                    <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                                    <f:selectItem itemLabel="Supervisor" itemValue="Supervisor" />
+                                    <f:selectItem itemLabel="Technician" itemValue="Technician" />                          
+                                </p:selectOneMenu>
+                            </f:facet>  
+                        </p:cellEditor>
+                    </p:column>
+
+
+
+                    <p:column headerText="Edit" style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
+                <p:commandButton  icon="ui-icon-plus" value="Add new User" actionListener="#{redirect.newStaff()}" ajax="false" validateClient="false" style="margin-right:10px"/>
+            </p:panel>
+
+
+
+
+        </h:form>
+    </ui:define>
+</ui:composition>

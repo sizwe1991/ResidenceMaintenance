@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <ui:define name="content">
+
+        <h:form id="frm">
+
+            <p:growl id="growl" life="6000" showDetail="true" sticky="true" />  
+
+            <p:panel id="pnl" header="Add New User">
+
+
+                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+
+
+                    <h:outputLabel for="staffNo" value="Staff Number: " style="font-weight:bold"/>                    
+                    <p:inputText id="staffNo" value="#{userController.staffNo}" placeholder="Staff No"   required="false" label="Staff Number"/>
+
+                    <h:outputLabel for="name" value="Name:" style="font-weight:bold"/>  
+                    <p:inputText id="name" placeholder="Staff Name" value="#{userController.staff.name}"    required="false" label="Name"/>
+
+
+                    <h:outputLabel for="Surname" value="Surname: " style="font-weight:bold"/>  
+                    <p:inputText id="Surname" placeholder="Staff Surname"  value="#{userController.staff.surname}" required="false" label="Surname"/>
+
+                    <h:outputLabel for="Email"  value="Email Address: " style="font-weight:bold"/>                    
+                    <p:inputText placeholder="Email Address" id="Email" value="#{userController.staff.email}" required="false" label="Email Address"/>
+
+                    <h:outputLabel for="Room" value="Room: " style="font-weight:bold"/>  
+                    <p:inputText id="Room" placeholder="Staff Room" value="#{userController.staff.room}"   required="false" label="Room"/>
+
+                    <h:outputLabel for="Ext" value="Extension No: " style="font-weight:bold"/>  
+                    <p:inputText id="Ext" maxlength="4" placeholder="Extension No" value="#{userController.staff.ext}"   required="false" label="Ext"/>
+
+                    <h:outputLabel for="type"  value="User Type: "  style="font-weight:bold;  "/>                    
+                    <p:selectOneMenu id="type" value="#{userController.staff.type}" required="false" style="width:180px">
+                        <p:ajax  listener="#{userController.onTypeChange}" update=":frm:pnl"  />
+                        <f:selectItem itemLabel="Select User Type"  noSelectionOption="true" />
+                        <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                        <f:selectItem itemLabel="Supervisor" itemValue="Supervisor" />
+                        <f:selectItem itemLabel="Technician" itemValue="Technician" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel id="sss" rendered="#{userController.isPassword}" for="password" value="Password:" style="font-weight:bold"/>                    
+                    <h:panelGrid rendered="#{userController.isPassword}" id="grid1" columns="2" cellpadding="5" >
+                        <p:password id="password" placeholder="Password" value="#{userController.staff.password}"  required="false" label="Password" />
+                        <p:message for="password" />
+                    </h:panelGrid>
+
+
+                    <h:outputLabel rendered="#{userController.isPassword}" for="confirmPassword" value="Confirm: " style="font-weight:bold"/>                    
+                    <h:panelGrid  rendered="#{userController.isPassword}" id="grid2" columns="2" cellpadding="5" >
+                        <p:password value="#{userController.confirmPassword}" placeholder="Confirm Password" id="confirmPassword"   required="false" label="Confirm Password"/>
+                        <p:message for="confirmPassword" />                        
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                
+                <p:selectBooleanCheckbox rendered="#{userController.isPassword}" itemLabel="User must change password after logging in the system"  />
+
+
+                <br /> <br />
+                <p:commandButton update="frm" actionListener="#{userController.saveUser()}"  value="Save User" ajax="false" style="margin-right:10px"/>
+                <p:commandButton actionListener="#{redirect.manageStaff()}"  value="Manage Users" ajax="false" validateClient="true" style="margin-right:10px"/>
+            </p:panel>
+        </h:form>
+
+
+
+
+    </ui:define>
+</ui:composition>

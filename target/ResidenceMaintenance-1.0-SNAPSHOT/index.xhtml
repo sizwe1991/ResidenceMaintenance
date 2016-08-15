@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      template="/templates/layout.xhtml"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Residence Maintenance</title>
+        <h:outputStylesheet library="css" name="default.css"  />
+        <link rel="shortcut icon"  href="resources/images/favicon.ico"/>
+        <link rel="shortcut icon"  href="../resources/images/favicon.ico"/>
+    </h:head>
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+    <p:dialog modal="true" widgetVar="statusDialog" header="Please wait while processing..."
+              draggable="false" closable="false" resizable="false" >
+        <p:graphicImage value="/resources/images/ajaxloader/loadingbar.gif" />
+    </p:dialog>
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+        <p:dialog modal="true" widgetVar="statusDialog" header="Please wait while processing..."
+                  draggable="false" closable="false" resizable="false" >
+            <p:graphicImage value="/resources/images/ajaxloader/loadingbar.gif" />
+        </p:dialog>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="center" >
+                <h:form id="mainForm" styleClass="loginPanelStyle" >
+                    <p:growl id="msgs"  showDetail="true" sticky="false" life="6000" />                        
+
+                    <p:fieldset  styleClass="loginPanelStyle" 
+                                 legend="Residence Maintenance System" >
+                        <img src=  "${request.contextPath}/resources/images/logo.png"  alt="banner" width="500" align="center"/>                    
+                    
+                        <h:panelGrid id="logPanelGrid" style="margin: 0 auto; margin-top: 23px; text-align: right; width: 350px" cellspacing="8" columns="2">
+
+
+                            <p:outputLabel for="console" value="User Type" />
+                            <p:selectOneRadio  requiredMessage="Please Select User Type"  id="console" value="#{loginController.type}">
+                                <p:ajax event="change" update="logPanelGrid"
+                                        listener="#{loginController.typeChange()}" />
+                                <f:selectItem itemLabel="Staff" itemValue="STAFF" />
+                                <f:selectItem itemLabel="Student"  itemValue="STUDENT" />
+
+                            </p:selectOneRadio>
+
+                            <h:panelGroup>
+                                <h:outputText value="#{loginController.usernametxt} :" />
+                                <h:outputText style="color:red" value="*  " />
+                            </h:panelGroup>
+
+                            <p:inputText value="#{loginController.username}" id="userName"  required="false" label="User Name" 
+                                         placeholder="#{loginController.usernametxt}"
+                                         />
+
+                            <h:panelGroup>
+                                <h:outputText value="Password :" />
+                                <h:outputText style="color:red" value="*  " />
+
+                            </h:panelGroup>
+                            <p:password id="pass"  value="#{loginController.password}" required="false" label="Password" 
+                                      placeholder="Password"
+                                        />
+
+                            <f:facet name="footer">
+                                <p:commandButton ajax="false" actionListener="#{loginController.login()}" id="btnLogin" value="Login" update="msgs"  
+                                                 type="submit" icon="ui-icon-unlocked" />                               
+                            
+                                
+                            </f:facet> 
+
+                        </h:panelGrid>
+
+                    </p:fieldset>
+
+
+                </h:form>
+
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>

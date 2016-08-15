@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"
+      template="/templates/layout.xhtml"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Residence Maintenance</title>
+        <h:outputStylesheet library="css" name="default.css"  />
+        <link rel="shortcut icon"  href="resources/images/favicon.ico"/>
+        <link rel="shortcut icon"  href="../resources/images/favicon.ico"/>
+    </h:head>
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+    <p:dialog modal="true" widgetVar="statusDialog" header="Please wait while processing..."
+              draggable="false" closable="false" resizable="false" >
+        <p:graphicImage value="/resources/images/ajaxloader/loadingbar.gif" />
+    </p:dialog>
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+        <p:dialog modal="true" widgetVar="statusDialog" header="Please wait while processing..."
+                  draggable="false" closable="false" resizable="false" >
+            <p:graphicImage value="/resources/images/ajaxloader/loadingbar.gif" />
+        </p:dialog>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="center" >
+                <h:form id="mainForm" styleClass="loginPanelStyle" >
+                    <p:growl id="msgs"  showDetail="true" sticky="false" life="6000" />                        
+
+                    <p:tabView id="tabView" dynamic="true" cache="true">
+                        <!-- <p:ajax event="tabChange" listener="#{studentController.reset()}" update=":mainForm:tabView" /> -->
+                        <p:tab title="New Incidence">
+
+                            <p:panel id="panel" >
+                                <h:panelGrid   columns="2" cellpadding="5">
+
+                                    <p:outputLabel value="Student No" />
+                                    <p:inputText value="#{studentController.student.studentNo}" placeholder="Student Number" maxlength="9" />
+
+                                    <p:outputLabel value="Initials" />
+                                    <p:inputText value="#{studentController.student.initials}" maxlength="3" />
+
+                                    <p:outputLabel value="Surname" />
+                                    <p:inputText value="#{studentController.student.surname}" maxlength="35" />
+
+                                    <p:outputLabel value="Phone No" />
+                                    <p:inputMask  value="#{studentController.student.phone}" mask="(999) 999-9999" />
+
+                                    <p:outputLabel  value="Residence Name" />
+                                    <p:selectOneMenu value="#{studentController.student.residence}" id="blockName"  style="width:200px">
+                                        <p:ajax  listener="#{studentController.onResidenceChange}" update=":mainForm:tabView"  />
+                                        <f:selectItem itemLabel="Select Block" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{studentController.residenceList}" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel rendered="#{studentController.blockRequired}" value="Block Number" />
+                                    <p:inputText rendered="#{studentController.blockRequired}" value="#{studentController.student.block}" maxlength="35" />
+
+                                    <p:outputLabel  value="Room No" />
+                                    <p:inputText value="#{studentController.student.room}" maxlength="15" />
+
+                                    <p:outputLabel value="Availability" />
+                                    <p:selectCheckboxMenu id="menu" value="#{studentController.availableTimes}" label="Select Available Times"
+                                                          filter="false" filterMatchMode="startsWith" panelStyle="width:250px">
+                                        <f:selectItem itemLabel="All Day" itemValue="All Day" />
+                                        <f:selectItem itemLabel="Immediately" itemValue="Immediately" />
+                                        <f:selectItem itemLabel="08:00-10:00" itemValue="08:00-10:00" />
+                                        <f:selectItem itemLabel="10:00-12:00" itemValue="10:00-12:00" />
+                                        <f:selectItem itemLabel="12:00-14:00"  itemValue="12:00-14:00" />
+                                        <f:selectItem itemLabel="14:00-16:00" itemValue="14:00-16:00" />
+                                    </p:selectCheckboxMenu>
+
+
+
+                                    <p:outputLabel value="Category" />
+                                    <p:selectOneMenu value="#{studentController.incident.category}" id="category"  style="width:200px">              
+                                        <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{studentController.categoryList}" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel  value="Description" />
+                                    <p:panelGrid columns="1">
+                                        <p:inputTextarea value="#{studentController.incident.description}" rows="3" cols="30" counter="display" maxlength="35" counterTemplate="{0} characters remaining." autoResize="false" />
+                                        <h:outputText id="display" />
+                                    </p:panelGrid>
+
+
+                                </h:panelGrid>
+
+
+                                <p:commandButton update=":mainForm" ajax="false" actionListener="#{studentController.btnAddRequest()}" value="Add Request" style="float: right" />
+                                <p:spacer /> <br />
+                            </p:panel>
+
+
+                        </p:tab>
+                        <p:tab title="Search Incident">
+
+                            <p:panel id="panelResult" >
+                                <style type="text/css">
+                                    .tftable {color:#333333;width:100%;border-width: 1px;border-collapse: collapse;}
+                                    .tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;text-align:left;}
+                                    .tftable tr {background-color: #ffffff;}
+                                    .tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;}
+                                    .tftable tr:hover {background-color:#ffffff;}
+                                </style>
+
+                                <table align="left" style="width: 410px" class="tftable" border="1">
+
+                                    <tr><td>Student Number</td><td> #{studentController.retrievedStudent.studentNo} </td> </tr>
+                                    <tr><td>Student Initials</td><td> #{studentController.retrievedStudent.initials} </td> </tr>
+                                    <tr><td>Student Surname</td><td> #{studentController.retrievedStudent.surname} </td> </tr>
+
+                                </table>
+
+
+
+                                <p:spacer />
+
+                                <h:panelGrid  columns="2" style="margin-bottom:10px" cellpadding="5">
+                                    <p:outputLabel style="font-style: italic" for="filter" value="Filter By: " />
+                                    <p:selectOneRadio value="#{studentController.status}" style="font-style: italic" id="filter" >
+                                        <p:ajax  listener="#{studentController.onStatusChange}" update=":mainForm:tabView"  />
+                                        <f:selectItem itemLabel="All" itemValue="All" />
+                                        <f:selectItem itemLabel="New" itemValue="New" />
+                                        <f:selectItem itemLabel="Open" itemValue="Open" />
+                                        <f:selectItem itemLabel="Close" itemValue="Close" />
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+
+                                <p:dataTable  paginator="true"
+                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                              rowsPerPageTemplate="5,10,15" emptyMessage="No Incidents Found" var="incident" value="#{studentController.incidentDataList}">
+                                    <p:column style="width:16px">
+                                        <p:rowToggler />
+                                    </p:column>
+                                    <p:column filterBy="#{incident.incidentID}" filterMatchMode="exact" headerText="Inc ID" width="40">
+                                        <h:outputText value="#{incident.incidentID}" />
+                                    </p:column>
+
+                                    <p:column sortBy="#{incident.dateLogged}" headerText="Date Requested">
+                                        <h:outputText value="#{studentController.formatDate(incident.dateLogged)} #{incident.timeLogged}" />
+                                    </p:column>
+
+                                    <p:column headerText="Duration" width="52">
+                                        <h:outputText value="#{studentController.daysBetween(incident.dateLogged)}" />
+                                    </p:column>
+
+                                    <p:column headerText="Technician Name">
+                                        <h:outputText value="#{studentController.getAttendent(incident)}" />
+                                    </p:column>
+
+                                    <p:column sortBy="#{incident.status}" headerText="Status" width="40">
+                                        <h:outputText value="#{incident.status}" />
+                                    </p:column>
+
+                                    <p:rowExpansion>
+                                        <p:panelGrid columns="1">
+                                            <table align="left" style="width: 410px" class="tftable" border="1">
+                                                <tr><td>Description</td><td> #{incident.description} </td> </tr>                                        
+
+                                                <tr><td>Technician Number</td><td> #{incident.attendent.staffNo} </td> </tr>    
+                                                <tr><td>Technician Name</td><td> #{incident.attendent.name} </td> </tr>  
+                                                <tr><td>Technician Surname</td><td> #{incident.attendent.surname} </td> </tr>   
+                                                <tr><td>Room No</td><td> #{incident.attendent.room} </td></tr>   
+                                                <tr><td>Telephone Number</td><td>(016) 950  #{incident.attendent.ext} </td> </tr>   
+                                                <tr><td>Email address</td><td> #{incident.attendent.email} </td> </tr>   
+                                            </table>
+                                            <br /><br />
+                                            <h:outputLink value="Link" rendered="#{incident.status eq 'New'}">
+                                                <p:commandButton id="btnReminder"  update="growl" value="Send Reminder"   ajax="false" validateClient="true" style="margin-right:10px; float: right"/>
+                                                <p:tooltip id="toolTipTrack" for="btnReminder" value="Send Technician Email Reminder about Incident" trackMouse="true" />
+                                            </h:outputLink>
+                                        </p:panelGrid>
+                                    </p:rowExpansion>
+                                </p:dataTable>
+                            </p:panel>                        
+
+                        </p:tab>
+
+                    </p:tabView>
+
+                </h:form>
+
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>
