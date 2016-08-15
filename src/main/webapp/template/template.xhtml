@@ -28,7 +28,7 @@
                 <p:layoutUnit position="north" size="17%" resizable="false" closable="false" collapsible="false">
                     <img src=  "${request.contextPath}/resources/images/logo.png"  alt="banner" width="500"/>
 
-                    <c:if test="#{login.objUser.username != null}" >
+                  
 
                         <h:form styleClass="login">
                             <p:commandButton id="dynaButton" value="#{login.objUser.username}-(#{login.objUser.name})" icon="ui-icon-person" type="button"/>
@@ -42,7 +42,7 @@
 
                         </h:form>
 
-                    </c:if>
+            
 
                 </p:layoutUnit>
 

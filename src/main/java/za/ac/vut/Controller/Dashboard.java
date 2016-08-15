@@ -68,7 +68,7 @@ public class Dashboard
     {
 
         chartModel = initBarModel();
-        chartModel.setTitle("Vaal University of Technology: Residence Maintenance System");
+        chartModel.setTitle("Vaal University of Technology: Categories Incidents");
         chartModel.setAnimate(true);
         chartModel.setLegendPosition("ne");
         Axis yAxis = chartModel.getAxis(AxisType.Y);
