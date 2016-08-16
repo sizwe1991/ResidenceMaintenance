@@ -35,7 +35,7 @@ public class Dashboard
     private List<Category> categoryList;
     private List<Residence> residenceList;
 
-    private BarChartModel chartModel;
+    private BarChartModel chartModel, chartModel2;
 
     @PostConstruct
     public void init()
@@ -45,6 +45,7 @@ public class Dashboard
         residenceList = residenceFacade.findAll();
 
         createAnimatedModel();
+        createAnimatedModel2();
     }
 
     public Dashboard()
@@ -57,6 +58,16 @@ public class Dashboard
     public void setChartModel(BarChartModel chartModel)
     {
         this.chartModel = chartModel;
+    }
+
+    public void setChartModel2(BarChartModel chartModel2)
+    {
+        this.chartModel2 = chartModel2;
+    }
+
+    public BarChartModel getChartModel2()
+    {
+        return chartModel2;
     }
 
     public BarChartModel getChartModel()
@@ -77,12 +88,25 @@ public class Dashboard
 
     }
 
-    private int getCategoryTotal(String Cat)
+    public void createAnimatedModel2()
+    {
+
+        chartModel2 = initBarModel2();
+        chartModel2.setTitle("Vaal University of Technology: Residence Incidents");
+        chartModel2.setAnimate(true);
+        chartModel2.setLegendPosition("ne");
+        Axis yAxis = chartModel2.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(100);
+
+    }
+
+    private int getCategoryTotal(String category)
     {
         int total = 0;
         for (Incident incident : incidentList)
         {
-            if (incident.getCategory().equalsIgnoreCase(Cat))
+            if (incident.getCategory().equalsIgnoreCase(category))
             {
                 total++;
             }
@@ -90,7 +114,20 @@ public class Dashboard
         return total;
     }
 
-    private int getNewValue(String Cat)
+    private int getResidenceTotal(String residence)
+    {
+        int total = 0;
+        for (Incident incident : incidentList)
+        {
+            if (incident.getStudentNo().getResidence().equalsIgnoreCase(residence))
+            {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    private int getNewCategoryValue(String Cat)
     {
         int total = 0;
         for (Incident incident : incidentList)
@@ -104,12 +141,26 @@ public class Dashboard
         return total;
     }
 
-    private int getOpenValue(String Cat)
+    private int getNewResidenceValue(String residence)
     {
         int total = 0;
         for (Incident incident : incidentList)
         {
-            if (incident.getCategory().equalsIgnoreCase(Cat)
+            if (incident.getStudentNo().getResidence().equalsIgnoreCase(residence)
+                    && incident.getStatus().equalsIgnoreCase("New"))
+            {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    private int getOpenCategoryValue(String category)
+    {
+        int total = 0;
+        for (Incident incident : incidentList)
+        {
+            if (incident.getCategory().equalsIgnoreCase(category)
                     && incident.getStatus().equalsIgnoreCase("Open"))
             {
                 total++;
@@ -118,13 +169,27 @@ public class Dashboard
         return total;
     }
 
-    private int getCloseValue(String Cat)
+    private int getOpenResidenceValue(String residence)
+    {
+        int total = 0;
+        for (Incident incident : incidentList)
+        {
+            if (incident.getStudentNo().getResidence().equalsIgnoreCase(residence)
+                    && incident.getStatus().equalsIgnoreCase("Open"))
+            {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    private int getCloseCategoryValue(String category)
     {
         int total = 0;
 
         for (Incident incident : incidentList)
         {
-            if (incident.getCategory().equalsIgnoreCase(Cat)
+            if (incident.getCategory().equalsIgnoreCase(category)
                     && incident.getStatus().equalsIgnoreCase("Close"))
             {
                 total++;
@@ -134,13 +199,45 @@ public class Dashboard
         return total;
     }
 
-    private int getOnHoldValue(String Cat)
+    private int getCloseResidenceValue(String residence)
     {
         int total = 0;
 
         for (Incident incident : incidentList)
         {
-            if (incident.getCategory().equalsIgnoreCase(Cat)
+            if (incident.getStudentNo().getResidence().equalsIgnoreCase(residence)
+                    && incident.getStatus().equalsIgnoreCase("Close"))
+            {
+                total++;
+            }
+        }
+
+        return total;
+    }
+
+    private int getOnHoldCategoryValue(String category)
+    {
+        int total = 0;
+
+        for (Incident incident : incidentList)
+        {
+            if (incident.getCategory().equalsIgnoreCase(category)
+                    && incident.getStatus().equalsIgnoreCase("On Hold"))
+            {
+                total++;
+            }
+        }
+
+        return total;
+    }
+
+    private int getOnHoldResidenceValue(String residence)
+    {
+        int total = 0;
+
+        for (Incident incident : incidentList)
+        {
+            if (incident.getStudentNo().getResidence().equalsIgnoreCase(residence)
                     && incident.getStatus().equalsIgnoreCase("On Hold"))
             {
                 total++;
@@ -172,10 +269,10 @@ public class Dashboard
             double closeValue = 0.0;
             double onHoldValue = 0.0;
 
-            int newNumber = getNewValue(category.getCategoryName());
-            int openNumber = getOpenValue(category.getCategoryName());
-            int closeNumber = getCloseValue(category.getCategoryName());
-            int onHoldNumber = getOnHoldValue(category.getCategoryName());
+            int newNumber = getNewCategoryValue(category.getCategoryName());
+            int openNumber = getOpenCategoryValue(category.getCategoryName());
+            int closeNumber = getCloseCategoryValue(category.getCategoryName());
+            int onHoldNumber = getOnHoldCategoryValue(category.getCategoryName());
 
             int total = getCategoryTotal(category.getCategoryName());
 
@@ -203,6 +300,70 @@ public class Dashboard
             openIncident.set(category.getCategoryName(), openValue);
             closedIncidents.set(category.getCategoryName(), closeValue);
             onHoldIncident.set(category.getCategoryName(), onHoldValue);
+
+        }
+
+        model.addSeries(newIncident);
+        model.addSeries(openIncident);
+        model.addSeries(closedIncidents);
+        model.addSeries(onHoldIncident);
+
+        return model;
+    }
+
+    private BarChartModel initBarModel2()
+    {
+
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries newIncident = new ChartSeries();
+        ChartSeries openIncident = new ChartSeries();
+        ChartSeries closedIncidents = new ChartSeries();
+        ChartSeries onHoldIncident = new ChartSeries();
+
+        newIncident.setLabel("New Incidents");
+        openIncident.setLabel("Open Incidents");
+        closedIncidents.setLabel("Close Incidents");
+        onHoldIncident.setLabel("On Hold Incidents");
+
+        for (Residence residence : residenceList)
+        {
+            double newValue = 0.0;
+            double openValue = 0.0;
+            double closeValue = 0.0;
+            double onHoldValue = 0.0;
+
+            int newNumber = getNewResidenceValue(residence.getResName());
+            int openNumber = getOpenResidenceValue(residence.getResName());
+            int closeNumber = getCloseResidenceValue(residence.getResName());
+            int onHoldNumber = getOnHoldResidenceValue(residence.getResName());
+
+            int total = getResidenceTotal(residence.getResName());
+
+            if (newNumber > 0)
+            {
+                newValue = (newNumber * 100) / total;
+            }
+
+            if (openNumber > 0)
+            {
+                openValue = (openNumber * 100) / total;
+            }
+
+            if (closeNumber > 0)
+            {
+                closeValue = (closeNumber * 100) / total;
+            }
+
+            if (onHoldNumber > 0)
+            {
+                onHoldValue = (onHoldNumber * 100) / total;
+            }
+
+            newIncident.set(residence.getResName(), newValue);
+            openIncident.set(residence.getResName(), openValue);
+            closedIncidents.set(residence.getResName(), closeValue);
+            onHoldIncident.set(residence.getResName(), onHoldValue);
 
         }
 
