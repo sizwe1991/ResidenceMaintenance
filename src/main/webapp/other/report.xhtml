@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panelGrid columns="8">
+                <p:outputLabel value="Student No" />
+
+                <p:panel style="border: 0">  
+                    <p:inputText id="studentNo" />
+                    <p:watermark for="studentNo" value="Student No" id="watermarksearchStudentNo" />                  
+                </p:panel>
+                <p:outputLabel value="Status" />
+                <p:selectOneMenu >
+                    <f:selectItem itemLabel="All" itemValue="#{null}"  />
+                    <f:selectItem itemValue="New"  itemLabel="New"/> 
+                    <f:selectItem itemValue="Open" itemLabel="Opened"/> 
+                    <f:selectItem itemValue="Close" itemLabel="Closed"/> 
+                    <f:selectItem itemValue="On Hold" itemLabel="On Hold"/> 
+                </p:selectOneMenu>
+                <p:outputLabel value="Technician" />
+                <p:panel style="border: 0">
+                    <p:inputText id="technician" />
+                    <p:watermark for="technician" value="Technician Staff No" id="watermarktechnician" />
+                </p:panel>
+                <p:outputLabel value="Category" />
+                <p:selectOneMenu style="width: 130px" >
+                    <f:selectItem itemLabel="All Categories" itemValue="#{null}"  />
+                    <f:selectItems value="#{studentController.categoryList}" />
+                </p:selectOneMenu>
+                <p:outputLabel value="Residence" />
+                <p:selectOneMenu style="width: 100%" >
+                    <f:selectItem itemLabel="All Residence" itemValue="#{null}"  />
+                    <f:selectItems value="#{studentController.residenceList}" />
+                </p:selectOneMenu>
+
+                <p:commandButton value="View" />
+            </p:panelGrid>
+
+            <p:spacer />
+            <p:dataTable  id="tblIncidents" value="#{dashboard.reportIncidentList}"
+                          var="incident" 
+                          resizableColumns="true" rows="20"   paginator="true" 
+                          editable="true" style="margin-bottom:20px"
+                          paginatorTemplate="{CurrentPageReport}
+                          {FirstPageLink} {PreviousPageLink}
+                          {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          rowsPerPageTemplate="20,30,40">
+                <f:facet name="header">
+                    <p:commandButton id="toggler" type="button" value="Columns"
+                                     style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="tblIncidents" trigger="toggler" />                 
+                    <p:spacer /><p:spacer /><p:spacer />
+                    <p:outputPanel style="height: 35px; float: right">     
+                        <h:commandLink>
+                            <p:graphicImage value="/resources/images/excel.jpg"  width="30" height="30" />                   
+                            <p:dataExporter type="xls" target="tblIncidents" fileName="report" pageOnly="false"/>
+                        </h:commandLink>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Incident No"    width="80" >
+                    <h:outputText value="#{incident.incidentID}" />
+                </p:column>
+
+                <p:column headerText="Student No"    width="80" >
+                    <h:outputText value="#{incident.studentNo.studentNo}" />
+                </p:column>
+
+                <p:column headerText="Full Names" width="180">
+                    <h:outputText value="#{incident.studentNo.initials} #{incident.studentNo.surname}" />
+                </p:column>
+
+                <p:column headerText="Residence" width="160">
+                    <h:outputText value="#{incident.studentNo.residence} #{incident.studentNo.room}" />
+                </p:column>
+
+                <p:column   headerText="Category">
+                    <h:outputText value="#{incident.category}" />
+                </p:column>
+
+                <p:column width="90"  headerText="Status">
+                    <h:outputText value="#{incident.status}" />
+                </p:column>
+
+                <p:column  headerText="Comment">
+                    <h:outputText value="#{incident.comment}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

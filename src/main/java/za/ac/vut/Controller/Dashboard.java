@@ -12,6 +12,7 @@ import javax.faces.bean.*;
 import org.primefaces.model.chart.*;
 import za.ac.vut.Entity.*;
 import za.ac.vut.Facade.*;
+import za.ac.vut.util.Redirect;
 
 /**
  *
@@ -31,16 +32,18 @@ public class Dashboard
     @EJB
     private ResidenceFacade residenceFacade;
 
-    private List<Incident> incidentList;
+    private List<Incident> incidentList, reportIncidentList;
     private List<Category> categoryList;
     private List<Residence> residenceList;
 
     private BarChartModel chartModel, chartModel2;
     private PieChartModel pieModel1;
+    private Redirect rd;
 
     @PostConstruct
     public void init()
     {
+        reportIncidentList = incidentFacade.findAll();
         incidentList = incidentFacade.findAll();
         categoryList = categoryFacade.findAll();
         residenceList = residenceFacade.findAll();
@@ -55,6 +58,26 @@ public class Dashboard
         incidentList = new ArrayList<>();
         categoryList = new ArrayList<>();
         residenceList = new ArrayList<>();
+
+        rd = new Redirect();
+    }
+
+    public List<Incident> getReportIncidentList()
+    {
+        return reportIncidentList;
+    }
+
+    public void setReportIncidentList(List<Incident> reportIncidentList)
+    {
+        this.reportIncidentList = reportIncidentList;
+    }
+    
+    
+
+    public void showDashBoard()
+    {
+        reportIncidentList = incidentFacade.findAll();
+        rd.dashBoard();
     }
 
     public PieChartModel getPieModel1()

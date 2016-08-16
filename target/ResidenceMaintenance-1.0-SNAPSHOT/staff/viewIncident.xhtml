@@ -54,7 +54,8 @@ and open the template in the editor.
                     </p:column>
 
                     <p:column width="80" headerText="Student No" filterBy="#{incident.studentNo.studentNo}" filterMatchMode="contains" >                   
-                        <h:outputText value="#{incident.studentNo.studentNo}" /> 
+                        <h:outputText id="searchStudentNo"  value="#{incident.studentNo.studentNo}" /> 
+                      
                     </p:column>
 
 
@@ -65,17 +66,17 @@ and open the template in the editor.
                     <p:column filterBy="#{incident.category}"  headerText="Category" width="90" filterMatchMode="exact"> 
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('incidentTable').filter()" >
-                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{studentController.categoryList}" />
                             </p:selectOneMenu>
                         </f:facet>
                         <h:outputText value="#{incident.category}" /> 
                     </p:column>
 
-                    <p:column filterBy="#{incident.studentNo.residence}"  headerText="Block" width="100" filterMatchMode="exact"> 
+                    <p:column filterBy="#{incident.studentNo.residence}"  headerText="Residence" width="100" filterMatchMode="exact"> 
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('incidentTable').filter()"  >
-                                <f:selectItem itemLabel="Select Block" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{studentController.residenceList}" />
                             </p:selectOneMenu>
                         </f:facet>

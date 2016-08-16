@@ -48,6 +48,11 @@ public class Redirect
         navigate("/other/dashboard.xhtml?faces-redirect=true");
     }
      
+       public void report()
+    {
+        navigate("/other/report.xhtml?faces-redirect=true");
+    }
+       
     public void viewIncident()
     {
         navigate("/staff/viewIncident.xhtml?faces-redirect=true");
