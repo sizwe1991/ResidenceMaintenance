@@ -15,21 +15,25 @@ and open the template in the editor.
     <ui:define name="content">
         <h:form id="form">
             <p:panelGrid columns="1" >
- <p:panel style="vertical-align: top;">
+                <p:panel style="vertical-align: top;">
                     <p:chart type="bar" model="#{dashboard.chartModel2}" 
                              style="width:1050px;  height: 240px;vertical-align: top;"
                              />
                 </p:panel>
-                
-           
-               
+
+
+
 
             </p:panelGrid>
-                 <p:panel style="vertical-align: top;">
+            <p:panelGrid columns="2" >
+                <p:panel style="vertical-align: top;">
                     <p:chart type="bar" model="#{dashboard.chartModel}" 
                              style="width:550px;  height: 240px;vertical-align: top;"
                              />
                 </p:panel>
+                <p:chart type="pie" model="#{dashboard.pieModel1}" style="width:480px;height:270px" />
+            </p:panelGrid>
+
 
         </h:form>
     </ui:define>

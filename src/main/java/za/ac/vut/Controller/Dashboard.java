@@ -36,6 +36,7 @@ public class Dashboard
     private List<Residence> residenceList;
 
     private BarChartModel chartModel, chartModel2;
+    private PieChartModel pieModel1;
 
     @PostConstruct
     public void init()
@@ -46,6 +47,7 @@ public class Dashboard
 
         createAnimatedModel();
         createAnimatedModel2();
+        createPieModels();
     }
 
     public Dashboard()
@@ -53,6 +55,71 @@ public class Dashboard
         incidentList = new ArrayList<>();
         categoryList = new ArrayList<>();
         residenceList = new ArrayList<>();
+    }
+
+    public PieChartModel getPieModel1()
+    {
+        return pieModel1;
+    }
+
+    public void setPieModel1(PieChartModel pieModel1)
+    {
+        this.pieModel1 = pieModel1;
+    }
+
+    private void createPieModels()
+    {
+        createPieModel1();
+
+    }
+
+    private void createPieModel1()
+    {
+        pieModel1 = new PieChartModel();
+
+        double openValue = 0, newValue = 0, closeValue = 0, onHoldValue = 0;
+
+        for (Incident incident : incidentList)
+        {
+
+            if (incident.getStatus().equalsIgnoreCase("New"))
+            {
+                newValue++;
+            } else if (incident.getStatus().equalsIgnoreCase("Open"))
+            {
+                openValue++;
+            } else if (incident.getStatus().equalsIgnoreCase("Close"))
+            {
+                closeValue++;
+            } else if (incident.getStatus().equalsIgnoreCase("On Hold"))
+            {
+                onHoldValue++;
+            }
+
+        }
+
+        if (onHoldValue > 0)
+        {
+            pieModel1.set("On Hold", onHoldValue);
+        }
+
+        if (newValue > 0)
+        {
+            pieModel1.set("New", newValue);
+        }
+
+        if (newValue > 0)
+        {
+            pieModel1.set("Open", openValue);
+        }
+
+        if (closeValue > 0)
+        {
+            pieModel1.set("Close", closeValue);
+        }
+
+        pieModel1.setTitle("Vaal University of Technology: Incidents");
+        pieModel1.setLegendPosition("w");
     }
 
     public void setChartModel(BarChartModel chartModel)

@@ -23,7 +23,14 @@ and open the template in the editor.
 
                 <h:panelGrid id="grid" columns="2" cellpadding="5">
 
-
+                    <h:outputLabel for="type"  value="User Type: "  style="font-weight:bold;  "/>                    
+                    <p:selectOneMenu id="type" value="#{userController.staff.type}" required="false" style="width:180px">
+                        <p:ajax  listener="#{userController.onTypeChange}" update=":frm:pnl"  />
+                        <f:selectItem itemLabel="Select User Type"  noSelectionOption="true" />
+                        <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                        <f:selectItem itemLabel="Supervisor" itemValue="Supervisor" />
+                        <f:selectItem itemLabel="Technician" itemValue="Technician" />
+                    </p:selectOneMenu>
 
                     <h:outputLabel for="staffNo" value="Staff Number: " style="font-weight:bold"/>                    
                     <p:inputText id="staffNo" value="#{userController.staffNo}" placeholder="Staff No"   required="false" label="Staff Number"/>
@@ -44,14 +51,7 @@ and open the template in the editor.
                     <h:outputLabel for="Ext" value="Extension No: " style="font-weight:bold"/>  
                     <p:inputText id="Ext" maxlength="4" placeholder="Extension No" value="#{userController.staff.ext}"   required="false" label="Ext"/>
 
-                    <h:outputLabel for="type"  value="User Type: "  style="font-weight:bold;  "/>                    
-                    <p:selectOneMenu id="type" value="#{userController.staff.type}" required="false" style="width:180px">
-                        <p:ajax  listener="#{userController.onTypeChange}" update=":frm:pnl"  />
-                        <f:selectItem itemLabel="Select User Type"  noSelectionOption="true" />
-                        <f:selectItem itemLabel="Admin" itemValue="Admin" />
-                        <f:selectItem itemLabel="Supervisor" itemValue="Supervisor" />
-                        <f:selectItem itemLabel="Technician" itemValue="Technician" />
-                    </p:selectOneMenu>
+
 
                     <h:outputLabel id="sss" rendered="#{userController.isPassword}" for="password" value="Password:" style="font-weight:bold"/>                    
                     <h:panelGrid rendered="#{userController.isPassword}" id="grid1" columns="2" cellpadding="5" >
@@ -67,7 +67,7 @@ and open the template in the editor.
                     </h:panelGrid>
 
                 </h:panelGrid>
-                
+
                 <p:selectBooleanCheckbox rendered="#{userController.isPassword}" itemLabel="User must change password after logging in the system"  />
 
 

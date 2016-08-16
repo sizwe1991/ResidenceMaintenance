@@ -31,7 +31,7 @@
                   
 
                         <h:form styleClass="login">
-                            <p:commandButton id="dynaButton" value="#{login.objUser.username}-(#{login.objUser.name})" icon="ui-icon-person" type="button"/>
+                            <p:commandButton id="dynaButton" value="#{loginController.username}-(#{loginController.getStaffName()})" icon="ui-icon-person" type="button"/>
                             <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
                                 <p:submenu label="Settings">
                                     <p:menuitem value="Logout" ajax="false" actionListener="#{login.logout()}" style="color: red" />
@@ -55,7 +55,7 @@
 
                     <h:form>
                         <p:menu>
-                            <p:menuitem  actionListener="#{redirect.dashBoardPage()}" value="Dashboard" />
+                            <p:menuitem  actionListener="#{redirect.dashBoard()}" value="Dashboard" />
                         </p:menu>
 
                         <p:menu >

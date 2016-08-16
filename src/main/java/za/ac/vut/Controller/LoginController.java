@@ -137,7 +137,7 @@ public class LoginController
         boolean value = false;
         for (Staff staff : staffList)
         {
-            if (staff.getPassword()!=null)
+            if (staff.getPassword() != null)
             {
                 if (staff.getStaffNo().equalsIgnoreCase(username)
                         && staff.getPassword().equals(password))
@@ -169,6 +169,11 @@ public class LoginController
             message = e.getMessage();
         }
         return value;
+    }
+
+    public String getStaffName()
+    {
+        return staffFacade.find(username).getName();
     }
 
     public void typeChange()

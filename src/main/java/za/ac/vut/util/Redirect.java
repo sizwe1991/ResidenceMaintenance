@@ -43,6 +43,11 @@ public class Redirect
         navigate("/staff/manageResidence.xhtml?faces-redirect=true");
     }
 
+     public void dashBoard()
+    {
+        navigate("/other/dashboard.xhtml?faces-redirect=true");
+    }
+     
     public void viewIncident()
     {
         navigate("/staff/viewIncident.xhtml?faces-redirect=true");
