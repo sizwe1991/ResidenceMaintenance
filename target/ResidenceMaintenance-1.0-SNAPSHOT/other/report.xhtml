@@ -14,38 +14,39 @@ and open the template in the editor.
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="content">
         <h:form id="form">
+             <p:growl id="msgs"  showDetail="true" sticky="false" life="6000" />  
             <p:panelGrid columns="8">
                 <p:outputLabel value="Student No" />
 
                 <p:panel style="border: 0">  
-                    <p:inputText id="studentNo" />
+                    <p:inputText value="#{dashboard.studentNo}" id="studentNo" />
                     <p:watermark for="studentNo" value="Student No" id="watermarksearchStudentNo" />                  
                 </p:panel>
                 <p:outputLabel value="Status" />
-                <p:selectOneMenu >
+                <p:selectOneMenu value="#{dashboard.status}" >
                     <f:selectItem itemLabel="All" itemValue="#{null}"  />
                     <f:selectItem itemValue="New"  itemLabel="New"/> 
                     <f:selectItem itemValue="Open" itemLabel="Opened"/> 
                     <f:selectItem itemValue="Close" itemLabel="Closed"/> 
                     <f:selectItem itemValue="On Hold" itemLabel="On Hold"/> 
                 </p:selectOneMenu>
-                <p:outputLabel value="Technician" />
+                <p:outputLabel value="Technician"  />
                 <p:panel style="border: 0">
-                    <p:inputText id="technician" />
+                    <p:inputText value="#{dashboard.technicianNo}" id="technician" />
                     <p:watermark for="technician" value="Technician Staff No" id="watermarktechnician" />
                 </p:panel>
                 <p:outputLabel value="Category" />
-                <p:selectOneMenu style="width: 130px" >
+                <p:selectOneMenu value="#{dashboard.categoryName}" style="width: 130px" >
                     <f:selectItem itemLabel="All Categories" itemValue="#{null}"  />
                     <f:selectItems value="#{studentController.categoryList}" />
                 </p:selectOneMenu>
                 <p:outputLabel value="Residence" />
-                <p:selectOneMenu style="width: 100%" >
+                <p:selectOneMenu value="#{dashboard.residenceName}" style="width: 100%" >
                     <f:selectItem itemLabel="All Residence" itemValue="#{null}"  />
                     <f:selectItems value="#{studentController.residenceList}" />
                 </p:selectOneMenu>
 
-                <p:commandButton value="View" />
+                <p:commandButton actionListener="#{dashboard.filterReport()}" ajax="false" value="View" update="form"/>
             </p:panelGrid>
 
             <p:spacer />
@@ -86,10 +87,14 @@ and open the template in the editor.
                     <h:outputText value="#{incident.studentNo.residence} #{incident.studentNo.room}" />
                 </p:column>
 
-                <p:column   headerText="Category">
+                <p:column  width="110" headerText="Category">
                     <h:outputText value="#{incident.category}" />
                 </p:column>
 
+                       <p:column  width="110" headerText="Technician">
+                           <h:outputText value="#{incident.attendent.staffNo}" />
+                </p:column>
+                
                 <p:column width="90"  headerText="Status">
                     <h:outputText value="#{incident.status}" />
                 </p:column>
